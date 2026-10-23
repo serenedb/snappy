@@ -2567,7 +2567,9 @@ bool SnappyScatteredWriter<Allocator>::SlowAppend(const char* ip, size_t len) {
   size_t avail = op_limit_ - op_ptr_;
   while (len > avail) {
     // Completely fill this block
-    std::memcpy(op_ptr_, ip, avail);
+    if (avail != 0) {
+      std::memcpy(op_ptr_, ip, avail);
+    }
     op_ptr_ += avail;
     assert(op_limit_ - op_ptr_ == 0);
     full_size_ += (op_ptr_ - op_base_);
